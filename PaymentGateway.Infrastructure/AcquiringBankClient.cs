@@ -13,16 +13,16 @@ public class AcquiringBankClient : IAcquiringBankClient
 
     public Task<HttpResponseMessage> ProcessPaymentAsync(string data)
     {
-        var response = new HttpResponseMessage
-        {
-            StatusCode = HttpStatusCode.OK
-        };
-
         var paymentId = Guid.NewGuid();
         _paymentIdToStatus.Add(paymentId, PaymentStatus.Pending);
 
-        var content = new ProcessPaymentSuccessfulResponse(paymentId, _paymentIdToStatus[paymentId]);
-        response.Content = new StringContent(JsonSerializer.Serialize(content));
+        var content = new ProcessPaymentResponse(paymentId, _paymentIdToStatus[paymentId]);
+
+        var response = new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StringContent(JsonSerializer.Serialize(content))
+        };
 
         return Task.FromResult(response);
     }
@@ -32,12 +32,17 @@ public class AcquiringBankClient : IAcquiringBankClient
         var request = JsonSerializer.Deserialize<GetPaymentDetailsRequest>(data);
         if (request == null)
         {
-            throw new JsonException();
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadRequest));
         }
 
-        var response = new HttpResponseMessage();
         var content = new GetPaymentStatusResponse(_paymentIdToStatus[request.PaymentId]);
-        response.Content = new StringContent(JsonSerializer.Serialize(content));
+
+        var response = new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StringContent(JsonSerializer.Serialize(content))
+        };
+
         return Task.FromResult(response);
     }
 }

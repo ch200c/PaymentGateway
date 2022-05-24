@@ -37,4 +37,3 @@ public class CardRepository : ICardRepository
         return card;
     }
 }
-

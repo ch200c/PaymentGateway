@@ -7,4 +7,3 @@ public interface ICardRepository
 {
     public Task<Card> UpsertCardAsync(string number, CardExpiryDate expiryDate, string cvv);
 }
-

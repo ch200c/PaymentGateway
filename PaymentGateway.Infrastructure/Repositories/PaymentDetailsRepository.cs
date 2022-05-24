@@ -22,7 +22,8 @@ public class PaymentDetailsRepository : IPaymentDetailsRepository
             .SingleOrDefaultAsync(paymentDetails => paymentDetails.Id == id);
     }
 
-    public async Task<PaymentDetails> InsertPaymentDetailsAsync(Guid id, decimal amount, Card card, string currencyCode, PaymentStatus status)
+    public async Task<PaymentDetails> InsertPaymentDetailsAsync(
+        Guid id, decimal amount, Card card, string currencyCode, PaymentStatus status)
     {
         var paymentDetails = new PaymentDetails()
         {

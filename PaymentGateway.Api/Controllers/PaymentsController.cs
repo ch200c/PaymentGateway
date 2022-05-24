@@ -20,22 +20,13 @@ public class PaymentsController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ProcessPaymentSuccessfulResponse))]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ProcessPaymentResponse))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ProcessPayment([FromBody] ProcessPaymentRequest request)
     {
         var response = await _paymentService.ProcessPaymentAsync(request);
 
-        return response.Match<ObjectResult>(
-            successfulResponse =>
-            {
-                return CreatedAtAction(
-                    nameof(GetPaymentDetails), new { PaymentId = successfulResponse.PaymentId }, successfulResponse);
-            },
-            unsuccessfulResponse =>
-            {
-                return BadRequest(unsuccessfulResponse.Error);
-            });
+        return CreatedAtAction(nameof(GetPaymentDetails), new { PaymentId = response.PaymentId }, response);
     }
 
     [HttpGet("{PaymentId}")]

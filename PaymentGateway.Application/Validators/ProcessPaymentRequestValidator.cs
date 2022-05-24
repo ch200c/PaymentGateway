@@ -1,11 +1,12 @@
 ﻿using FluentValidation;
+using PaymentGateway.Application.Interfaces;
 using PaymentGateway.Application.ProcessPayment;
 
 namespace PaymentGateway.Application.Validators;
 
 public class ProcessPaymentRequestValidator : AbstractValidator<ProcessPaymentRequest>
 {
-    public ProcessPaymentRequestValidator()
+    public ProcessPaymentRequestValidator(IDateTimeProvider dateTimeProvider)
     {
         RuleFor(request => request.CardNumber)
             .NotNull()
@@ -13,7 +14,7 @@ public class ProcessPaymentRequestValidator : AbstractValidator<ProcessPaymentRe
             .WithMessage($"'{nameof(ProcessPaymentRequest.CardNumber)}' has to be 16 digits");
 
         RuleFor(request => request.ExpiryDate)
-            .SetValidator(new ExpiryDateValidator())
+            .SetValidator(new ExpiryDateValidator(dateTimeProvider))
             .WithMessage($"'{nameof(ProcessPaymentRequest.ExpiryDate)}' can't be in the past");
 
         RuleFor(request => request.Amount)

@@ -1,5 +1,4 @@
-﻿using OneOf;
-using PaymentGateway.Application.GetPaymentDetails;
+﻿using PaymentGateway.Application.GetPaymentDetails;
 using PaymentGateway.Application.Interfaces;
 using PaymentGateway.Application.Interfaces.Repositories;
 using PaymentGateway.Application.ProcessPayment;
@@ -16,7 +15,7 @@ public class PaymentService : IPaymentService
     private readonly IPaymentDetailsRepository _paymentDetailsRepository;
 
     public PaymentService(
-        IAcquiringBankClient acquiringBankClient, 
+        IAcquiringBankClient acquiringBankClient,
         ICardRepository cardRepository,
         IPaymentDetailsRepository paymentDetailsRepository)
     {
@@ -25,7 +24,7 @@ public class PaymentService : IPaymentService
         _paymentDetailsRepository = paymentDetailsRepository;
     }
 
-    public async Task<OneOf<ProcessPaymentSuccessfulResponse, ProcessPaymentUnsuccessfulResponse>> ProcessPaymentAsync(ProcessPaymentRequest request)
+    public async Task<ProcessPaymentResponse> ProcessPaymentAsync(ProcessPaymentRequest request)
     {
         var card = await _cardRepository.UpsertCardAsync(request.CardNumber, request.ExpiryDate, request.Cvv);
 
@@ -34,21 +33,15 @@ public class PaymentService : IPaymentService
         var response = await _acquiringBankClient.ProcessPaymentAsync(serializedRequest);
         var responseContent = await response.Content.ReadAsStringAsync();
 
-        if (response.IsSuccessStatusCode)
-        {
-            var successfulResponse = JsonSerializer.Deserialize<ProcessPaymentSuccessfulResponse>(responseContent) ??
-                throw new JsonException(DeserializationErrorMessage);
+        response.EnsureSuccessStatusCode();
 
-            await _paymentDetailsRepository.InsertPaymentDetailsAsync(
-                successfulResponse.PaymentId, request.Amount, card, request.CurrencyCode, successfulResponse.Status);
+        var successfulResponse = JsonSerializer.Deserialize<ProcessPaymentResponse>(responseContent) ??
+            throw new JsonException(DeserializationErrorMessage);
 
-            return successfulResponse;
-        }
-        else
-        {
-            return JsonSerializer.Deserialize<ProcessPaymentUnsuccessfulResponse>(responseContent) ?? 
-                throw new JsonException(DeserializationErrorMessage);
-        }
+        await _paymentDetailsRepository.InsertPaymentDetailsAsync(
+            successfulResponse.PaymentId, request.Amount, card, request.CurrencyCode, successfulResponse.Status);
+
+        return successfulResponse;
     }
 
     public async Task<GetPaymentDetailsResponse?> GetPaymentDetailsAsync(GetPaymentDetailsRequest request)
@@ -67,7 +60,7 @@ public class PaymentService : IPaymentService
 
         response.EnsureSuccessStatusCode();
 
-        var statusResponse = JsonSerializer.Deserialize<GetPaymentStatusResponse>(responseContent) ?? 
+        var statusResponse = JsonSerializer.Deserialize<GetPaymentStatusResponse>(responseContent) ??
             throw new JsonException(DeserializationErrorMessage);
 
         return new GetPaymentDetailsResponse(
@@ -79,4 +72,3 @@ public class PaymentService : IPaymentService
             Status: statusResponse.Status);
     }
 }
-

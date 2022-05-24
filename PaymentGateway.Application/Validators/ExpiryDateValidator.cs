@@ -1,19 +1,22 @@
 ﻿using FluentValidation;
+using PaymentGateway.Application.Interfaces;
 using PaymentGateway.Domain;
 
 namespace PaymentGateway.Application.Validators;
 
 public class ExpiryDateValidator : AbstractValidator<CardExpiryDate>
 {
-    public ExpiryDateValidator()
+    public ExpiryDateValidator(IDateTimeProvider dateTimeProvider)
     {
+        var dateTime = dateTimeProvider.GetDateTime();
+
         RuleFor(expiryDate => expiryDate.Year)
             .NotNull()
-            .GreaterThanOrEqualTo(DateTime.UtcNow.Year);
+            .GreaterThanOrEqualTo(dateTime.Year);
 
         RuleFor(expiryDate => expiryDate.Month)
             .NotNull()
-            .GreaterThanOrEqualTo(DateTime.UtcNow.Month)
-            .When(expiryDate => expiryDate.Year == DateTime.UtcNow.Year);
+            .GreaterThanOrEqualTo(dateTime.Month)
+            .When(expiryDate => expiryDate.Year == dateTime.Year);
     }
 }

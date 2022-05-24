@@ -1,5 +1,6 @@
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using PaymentGateway.Api.Services;
 using PaymentGateway.Application.Interfaces;
 using PaymentGateway.Application.Interfaces.Repositories;
 using PaymentGateway.Application.Validators;
@@ -28,12 +29,16 @@ builder.Services.AddScoped<IPaymentDetailsRepository, PaymentDetailsRepository>(
 builder.Services.AddTransient<IPaymentService, PaymentService>();
 builder.Services.AddSingleton<IAcquiringBankClient, AcquiringBankClient>();
 
+builder.Services.AddTransient<IDateTimeProvider, DateTimeProvider>();
+
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+app.UseExceptionHandler("/error");
 
 app.MapControllers();
 

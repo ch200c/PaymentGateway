@@ -8,7 +8,7 @@ A simple API allowing merchants to process payments and retrieve payment details
 
 ### dotnet CLI 
 - Run `dotnet run --project PaymentGateway.Api` from the root folder
-- Access the API at https://localhost:7256
+- Access the API at https://localhost:7256/swagger/index.html
 
 ### Docker 
 - Run the following commands from the root folder.
@@ -16,7 +16,7 @@ A simple API allowing merchants to process payments and retrieve payment details
 docker build -f PaymentGateway.Api/Dockerfile -t payment-gateway-api .
 docker run -p 0.0.0.0:9888:80/tcp payment-gateway-api
 ```
-- Access the API at http://localhost:9888
+- Access the API at http://localhost:9888/swagger/index.html
 
 ## Architecture
 The solution is divided into 4 projects, following the [Clean Architecture template](https://github.com/jasontaylordev/CleanArchitecture).
@@ -29,7 +29,15 @@ The solution is divided into 4 projects, following the [Clean Architecture templ
 ## Areas for improvement
 - More thorough input validation
 - Caching
+- Logging
+- Health checks
 
 ## Minor technical details
-(https://docs.microsoft.com/en-us/ef/core/modeling/value-conversions?tabs=data-annotations#composite-value-objects)
-(https://docs.microsoft.com/en-us/ef/core/miscellaneous/nullable-reference-types#non-nullable-properties-and-initialization)
+Composite value object implementation from [MS](https://docs.microsoft.com/en-us/ef/core/modeling/value-conversions?tabs=data-annotations#composite-value-objects)
+Uninitialized non nullable property implementation from [MS](https://docs.microsoft.com/en-us/ef/core/miscellaneous/nullable-reference-types#non-nullable-properties-and-initialization)
+
+## Extra mile
+- Unit tests
+- Error handling
+- API versioning
+- Tidying up, refactoring

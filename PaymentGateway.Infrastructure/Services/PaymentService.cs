@@ -36,18 +36,18 @@ public class PaymentService : IPaymentService
 
         responseMessage.EnsureSuccessStatusCode();
 
-        var successfulResponse = JsonSerializer.Deserialize<ProcessPaymentResponse>(responseContent) ??
+        var deserializedResponse = JsonSerializer.Deserialize<ProcessPaymentResponse>(responseContent) ??
             throw new JsonException(DeserializationErrorMessage);
 
-        await _paymentDetailsRepository.InsertPaymentDetailsAsync(
-            successfulResponse.PaymentId, request.Amount, card, request.CurrencyCode, successfulResponse.Status);
+        await _paymentDetailsRepository.InsertAsync(
+            deserializedResponse.PaymentId, request.Amount, card, request.CurrencyCode, deserializedResponse.Status);
 
-        return successfulResponse;
+        return deserializedResponse;
     }
 
     public async Task<GetPaymentDetailsResponse?> GetPaymentDetailsAsync(GetPaymentDetailsRequest request)
     {
-        var paymentDetails = await _paymentDetailsRepository.GetPaymentDetailsAsync(request.PaymentId);
+        var paymentDetails = await _paymentDetailsRepository.GetAsync(request.PaymentId);
 
         if (paymentDetails == null)
         {
@@ -56,12 +56,12 @@ public class PaymentService : IPaymentService
 
         var serializedRequest = JsonSerializer.Serialize(request);
 
-        var response = await _acquiringBankClient.GetPaymentStatusAsync(serializedRequest);
-        var responseContent = await response.Content.ReadAsStringAsync();
+        var responseMessage = await _acquiringBankClient.GetPaymentStatusAsync(serializedRequest);
+        var responseContent = await responseMessage.Content.ReadAsStringAsync();
 
-        response.EnsureSuccessStatusCode();
+        responseMessage.EnsureSuccessStatusCode();
 
-        var statusResponse = JsonSerializer.Deserialize<GetPaymentStatusResponse>(responseContent) ??
+        var deserializedResponse = JsonSerializer.Deserialize<GetPaymentStatusResponse>(responseContent) ??
             throw new JsonException(DeserializationErrorMessage);
 
         return new GetPaymentDetailsResponse(
@@ -70,6 +70,6 @@ public class PaymentService : IPaymentService
             CardCvv: paymentDetails.Card.Cvv,
             Amount: paymentDetails.Amount,
             CurrencyCode: paymentDetails.CurrencyCode,
-            Status: statusResponse.Status);
+            Status: deserializedResponse.Status);
     }
 }

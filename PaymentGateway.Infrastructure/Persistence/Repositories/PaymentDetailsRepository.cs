@@ -15,14 +15,14 @@ public class PaymentDetailsRepository : IPaymentDetailsRepository
         _dbContext = dbContext;
     }
 
-    public Task<PaymentDetails?> GetPaymentDetailsAsync(Guid id)
+    public Task<PaymentDetails?> GetAsync(Guid id)
     {
         return _dbContext.PaymentDetails
             .Include(paymentDetails => paymentDetails.Card)
             .SingleOrDefaultAsync(paymentDetails => paymentDetails.Id == id);
     }
 
-    public async Task<PaymentDetails> InsertPaymentDetailsAsync(
+    public async Task<PaymentDetails> InsertAsync(
         Guid id, decimal amount, Card card, string currencyCode, PaymentStatus status)
     {
         var paymentDetails = new PaymentDetails()

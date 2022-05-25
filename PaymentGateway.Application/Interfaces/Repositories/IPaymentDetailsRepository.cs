@@ -1,5 +1,5 @@
-﻿using PaymentGateway.Domain;
-using PaymentGateway.Domain.Entities;
+﻿using PaymentGateway.Domain.Entities;
+using PaymentGateway.Domain.Enums;
 
 namespace PaymentGateway.Application.Interfaces.Repositories;
 

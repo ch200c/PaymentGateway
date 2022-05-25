@@ -1,4 +1,4 @@
-﻿namespace PaymentGateway.Domain;
+﻿namespace PaymentGateway.Domain.Utils;
 
 public static class CardNumberPrivacyFilter
 {

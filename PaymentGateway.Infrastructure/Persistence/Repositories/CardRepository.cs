@@ -1,9 +1,9 @@
 ﻿using PaymentGateway.Application.Interfaces;
 using PaymentGateway.Application.Interfaces.Repositories;
-using PaymentGateway.Domain;
 using PaymentGateway.Domain.Entities;
+using PaymentGateway.Domain.ValueObjects;
 
-namespace PaymentGateway.Infrastructure.Repositories;
+namespace PaymentGateway.Infrastructure.Persistence.Repositories;
 
 public class CardRepository : ICardRepository
 {
@@ -14,7 +14,7 @@ public class CardRepository : ICardRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Card> UpsertCardAsync(string number, CardExpiryDate expiryDate, string cvv)
+    public async Task<Card> GetOrInsertAsync(string number, CardExpiryDate expiryDate, string cvv)
     {
         var card = _dbContext.Cards
             .SingleOrDefault(card => card.Number == number && card.ExpiryDate == expiryDate && card.Cvv == cvv);
@@ -26,7 +26,7 @@ public class CardRepository : ICardRepository
 
         card = new Card()
         {
-            Number = CardNumberPrivacyFilter.Mask(number),
+            Number = number,
             ExpiryDate = expiryDate,
             Cvv = cvv
         };

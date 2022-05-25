@@ -1,4 +1,4 @@
-﻿using PaymentGateway.Domain;
+﻿using PaymentGateway.Domain.Enums;
 
 namespace PaymentGateway.Application.GetPaymentDetails;
 

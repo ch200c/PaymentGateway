@@ -9,7 +9,8 @@ namespace PaymentGateway.Api.Controllers;
 [ApiController]
 [Consumes(MediaTypeNames.Application.Json)]
 [Produces(MediaTypeNames.Application.Json)]
-[Route("[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class PaymentsController : ControllerBase
 {
     private readonly IPaymentService _paymentService;
@@ -29,18 +30,18 @@ public class PaymentsController : ControllerBase
         return CreatedAtAction(nameof(GetPaymentDetails), new { PaymentId = response.PaymentId }, response);
     }
 
-    [HttpGet("{PaymentId}")]
+    [HttpGet("{PaymentId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetPaymentDetailsResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetPaymentDetails([FromRoute] GetPaymentDetailsRequest request)
     {
-        var result = await _paymentService.GetPaymentDetailsAsync(request);
+        var paymentDetails = await _paymentService.GetPaymentDetailsAsync(request);
 
-        if (result == null)
+        if (paymentDetails == null)
         {
             return NotFound();
         }
 
-        return Ok(result);
+        return Ok(paymentDetails);
     }
 }

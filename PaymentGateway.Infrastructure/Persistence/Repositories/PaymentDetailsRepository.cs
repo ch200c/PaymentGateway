@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PaymentGateway.Application.Interfaces;
 using PaymentGateway.Application.Interfaces.Repositories;
-using PaymentGateway.Domain;
 using PaymentGateway.Domain.Entities;
+using PaymentGateway.Domain.Enums;
 
-namespace PaymentGateway.Infrastructure.Repositories;
+namespace PaymentGateway.Infrastructure.Persistence.Repositories;
 
 public class PaymentDetailsRepository : IPaymentDetailsRepository
 {
@@ -40,4 +40,3 @@ public class PaymentDetailsRepository : IPaymentDetailsRepository
         return paymentDetails;
     }
 }
-

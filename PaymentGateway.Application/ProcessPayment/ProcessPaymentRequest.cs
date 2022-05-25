@@ -1,6 +1,6 @@
-﻿using PaymentGateway.Domain;
+﻿using PaymentGateway.Domain.ValueObjects;
 
 namespace PaymentGateway.Application.ProcessPayment;
 
 public record class ProcessPaymentRequest(
-    string CardNumber, CardExpiryDate ExpiryDate, string Cvv, decimal Amount, string CurrencyCode);
+    string CardNumber, CardExpiryDate CardExpiryDate, string CardCvv, decimal Amount, string CurrencyCode);

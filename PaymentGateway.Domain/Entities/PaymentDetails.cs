@@ -1,4 +1,6 @@
-﻿namespace PaymentGateway.Domain.Entities;
+﻿using PaymentGateway.Domain.Enums;
+
+namespace PaymentGateway.Domain.Entities;
 
 public class PaymentDetails
 {

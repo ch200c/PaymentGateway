@@ -1,4 +1,6 @@
-﻿namespace PaymentGateway.Domain.Entities;
+﻿using PaymentGateway.Domain.ValueObjects;
+
+namespace PaymentGateway.Domain.Entities;
 
 public class Card
 {

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using PaymentGateway.Application.Interfaces;
-using PaymentGateway.Domain;
+using PaymentGateway.Domain.ValueObjects;
 
 namespace PaymentGateway.Application.Validators;
 

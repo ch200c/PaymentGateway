@@ -1,1 +1,10 @@
 global using Xunit;
+global using Moq;
+global using Microsoft.AspNetCore.Mvc.Testing;
+global using PaymentGateway.Application.GetPaymentDetails;
+global using PaymentGateway.Application.Interfaces;
+global using PaymentGateway.Application.ProcessPayment;
+global using System.Text.Json;
+global using System.Text.Json.Serialization;
+global using PaymentGateway.Domain.Enums;
+global using PaymentGateway.Domain.ValueObjects;

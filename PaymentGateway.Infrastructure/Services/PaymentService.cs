@@ -2,9 +2,10 @@
 using PaymentGateway.Application.Interfaces;
 using PaymentGateway.Application.Interfaces.Repositories;
 using PaymentGateway.Application.ProcessPayment;
+using PaymentGateway.Domain.Utils;
 using System.Text.Json;
 
-namespace PaymentGateway.Infrastructure;
+namespace PaymentGateway.Infrastructure.Services;
 
 public class PaymentService : IPaymentService
 {
@@ -26,14 +27,14 @@ public class PaymentService : IPaymentService
 
     public async Task<ProcessPaymentResponse> ProcessPaymentAsync(ProcessPaymentRequest request)
     {
-        var card = await _cardRepository.UpsertCardAsync(request.CardNumber, request.ExpiryDate, request.Cvv);
+        var card = await _cardRepository.GetOrInsertAsync(request.CardNumber, request.CardExpiryDate, request.CardCvv);
 
         var serializedRequest = JsonSerializer.Serialize(request);
 
-        var response = await _acquiringBankClient.ProcessPaymentAsync(serializedRequest);
-        var responseContent = await response.Content.ReadAsStringAsync();
+        var responseMessage = await _acquiringBankClient.ProcessPaymentAsync(serializedRequest);
+        var responseContent = await responseMessage.Content.ReadAsStringAsync();
 
-        response.EnsureSuccessStatusCode();
+        responseMessage.EnsureSuccessStatusCode();
 
         var successfulResponse = JsonSerializer.Deserialize<ProcessPaymentResponse>(responseContent) ??
             throw new JsonException(DeserializationErrorMessage);
@@ -64,9 +65,9 @@ public class PaymentService : IPaymentService
             throw new JsonException(DeserializationErrorMessage);
 
         return new GetPaymentDetailsResponse(
-            CardNumber: paymentDetails.Card.Number,
-            ExpiryDate: paymentDetails.Card.ExpiryDate,
-            Cvv: paymentDetails.Card.Cvv,
+            CardNumber: CardNumberPrivacyFilter.Mask(paymentDetails.Card.Number),
+            CardExpiryDate: paymentDetails.Card.ExpiryDate,
+            CardCvv: paymentDetails.Card.Cvv,
             Amount: paymentDetails.Amount,
             CurrencyCode: paymentDetails.CurrencyCode,
             Status: statusResponse.Status);

@@ -4,8 +4,9 @@ using PaymentGateway.Api.Services;
 using PaymentGateway.Application.Interfaces;
 using PaymentGateway.Application.Interfaces.Repositories;
 using PaymentGateway.Application.Validators;
-using PaymentGateway.Infrastructure;
-using PaymentGateway.Infrastructure.Repositories;
+using PaymentGateway.Infrastructure.Persistence;
+using PaymentGateway.Infrastructure.Persistence.Repositories;
+using PaymentGateway.Infrastructure.Services;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,13 @@ builder.Services
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddApiVersioning();
+builder.Services.AddVersionedApiExplorer(options =>
+{
+    options.SubstituteApiVersionInUrl = true;
+    options.GroupNameFormat = "'v'VVV";
+});
 
 builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(builder => 
     builder.UseInMemoryDatabase("PaymentGateway"));

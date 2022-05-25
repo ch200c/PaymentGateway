@@ -13,9 +13,9 @@ public class ProcessPaymentRequestValidator : AbstractValidator<ProcessPaymentRe
             .Length(16)
             .WithMessage($"'{nameof(ProcessPaymentRequest.CardNumber)}' has to be 16 digits");
 
-        RuleFor(request => request.ExpiryDate)
+        RuleFor(request => request.CardExpiryDate)
             .SetValidator(new ExpiryDateValidator(dateTimeProvider))
-            .WithMessage($"'{nameof(ProcessPaymentRequest.ExpiryDate)}' can't be in the past");
+            .WithMessage($"'{nameof(ProcessPaymentRequest.CardExpiryDate)}' can't be in the past");
 
         RuleFor(request => request.Amount)
             .NotNull()
@@ -26,9 +26,9 @@ public class ProcessPaymentRequestValidator : AbstractValidator<ProcessPaymentRe
             .NotNull()
             .Length(3);
 
-        RuleFor(request => request.Cvv)
+        RuleFor(request => request.CardCvv)
             .NotNull()
             .Length(3)
-            .WithMessage($"'{nameof(ProcessPaymentRequest.Cvv)}' has to 3 digits");
+            .WithMessage($"'{nameof(ProcessPaymentRequest.CardCvv)}' has to 3 digits");
     }
 }

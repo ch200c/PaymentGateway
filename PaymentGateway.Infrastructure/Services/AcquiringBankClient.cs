@@ -1,11 +1,11 @@
 ﻿using PaymentGateway.Application.GetPaymentDetails;
 using PaymentGateway.Application.Interfaces;
 using PaymentGateway.Application.ProcessPayment;
-using PaymentGateway.Domain;
+using PaymentGateway.Domain.Enums;
 using System.Net;
 using System.Text.Json;
 
-namespace PaymentGateway.Infrastructure;
+namespace PaymentGateway.Infrastructure.Services;
 
 public class AcquiringBankClient : IAcquiringBankClient
 {

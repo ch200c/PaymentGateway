@@ -29,6 +29,6 @@ public class ProcessPaymentRequestValidator : AbstractValidator<ProcessPaymentRe
         RuleFor(request => request.CardCvv)
             .NotNull()
             .Length(3)
-            .WithMessage($"'{nameof(ProcessPaymentRequest.CardCvv)}' has to 3 digits");
+            .WithMessage($"'{nameof(ProcessPaymentRequest.CardCvv)}' has to be 3 digits");
     }
 }

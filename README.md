@@ -18,6 +18,22 @@ docker run -p 0.0.0.0:9888:80/tcp payment-gateway-api
 ```
 - Access the API at http://localhost:9888/swagger/index.html
 
+---
+For ease of use, here is a sample input for processing a payment
+
+```json
+{
+  "cardNumber": "1234567890123456",
+  "cardExpiryDate": {
+    "year": 2330,
+    "month": 10
+  },
+  "cardCvv": "123",
+  "amount": 10,
+  "currencyCode": "EUR"
+}
+```
+
 ## Running the tests
 ### Visual Studio
 - Run the tests from the Test Explorer
@@ -26,7 +42,7 @@ docker run -p 0.0.0.0:9888:80/tcp payment-gateway-api
 - Run `dotnet test` from the root folder
 
 ## Architecture
-The solution is divided into 4 main logic projects and 2 tests projects. It is following the [Clean Architecture template](https://github.com/jasontaylordev/CleanArchitecture).
+The solution is divided into 4 main logic projects and 2 test projects. It is following the [Clean Architecture template](https://github.com/jasontaylordev/CleanArchitecture).
 
 ## Assumptions
 - Acquiring Bank component communicates over HTTP (as well as our API does). Therefore, its interface is asynchronous with return types of `HttpResponseMessage`. Since we are only simulating it, we are hosting it together with our API.
@@ -35,16 +51,20 @@ The solution is divided into 4 main logic projects and 2 tests projects. It is f
 
 ## Areas for improvement
 - More thorough input validation
+- Resilience policies for HTTP communication
 - Caching
 - Logging
 - Health checks
 
 ## Minor technical details
-Composite value object implementation from [MS](https://docs.microsoft.com/en-us/ef/core/modeling/value-conversions?tabs=data-annotations#composite-value-objects)
-Uninitialized non nullable property implementation from [MS](https://docs.microsoft.com/en-us/ef/core/miscellaneous/nullable-reference-types#non-nullable-properties-and-initialization)
+- Composite value object implementation from [MS](https://docs.microsoft.com/en-us/ef/core/modeling/value-conversions?tabs=data-annotations#composite-value-objects)
+- Uninitialized non nullable property implementation from [MS](https://docs.microsoft.com/en-us/ef/core/miscellaneous/nullable-reference-types#non-nullable-properties-and-initialization)
 
 ## Extra mile
 - Unit tests
 - Error handling
 - API versioning
 - Tidying up, refactoring
+
+## Cloud technology considerations
+You could scale this API on multiple instances or even run it on a serverless environment.

@@ -14,15 +14,18 @@ public class PaymentService : IPaymentService
     private readonly IAcquiringBankClient _acquiringBankClient;
     private readonly ICardRepository _cardRepository;
     private readonly IPaymentDetailsRepository _paymentDetailsRepository;
+    private readonly CardNumberPrivacyFilter _cardNumberPrivacyFilter;
 
     public PaymentService(
         IAcquiringBankClient acquiringBankClient,
         ICardRepository cardRepository,
-        IPaymentDetailsRepository paymentDetailsRepository)
+        IPaymentDetailsRepository paymentDetailsRepository,
+        CardNumberPrivacyFilter cardNumberPrivacyFilter)
     {
         _acquiringBankClient = acquiringBankClient;
         _cardRepository = cardRepository;
         _paymentDetailsRepository = paymentDetailsRepository;
+        _cardNumberPrivacyFilter = cardNumberPrivacyFilter;
     }
 
     public async Task<ProcessPaymentResponse> ProcessPaymentAsync(ProcessPaymentRequest request)
@@ -65,7 +68,7 @@ public class PaymentService : IPaymentService
             throw new JsonException(DeserializationErrorMessage);
 
         return new GetPaymentDetailsResponse(
-            CardNumber: CardNumberPrivacyFilter.Mask(paymentDetails.Card.Number),
+            CardNumber: _cardNumberPrivacyFilter.Mask(paymentDetails.Card.Number, 4),
             CardExpiryDate: paymentDetails.Card.ExpiryDate,
             CardCvv: paymentDetails.Card.Cvv,
             Amount: paymentDetails.Amount,

@@ -13,7 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentGateway.Infrastructu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentGateway.UnitTests", "PaymentGateway.UnitTests\PaymentGateway.UnitTests.csproj", "{59BC9BDD-AF5C-41F4-9BC2-1DF76B13B44E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentGateway.IntegrationTests", "PaymentGateway.IntegrationTests\PaymentGateway.IntegrationTests.csproj", "{623D9C25-7E00-45FB-A55E-6A154A98BB04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentGateway.IntegrationTests", "PaymentGateway.IntegrationTests\PaymentGateway.IntegrationTests.csproj", "{623D9C25-7E00-45FB-A55E-6A154A98BB04}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{D64977FB-1393-4DEB-92F4-83F70C0C4737}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BC0DD7C8-6E3A-4B57-A7B1-0ADA92665DB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +52,14 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6799D42C-CE8F-4D81-95EF-64992E879F35} = {D64977FB-1393-4DEB-92F4-83F70C0C4737}
+		{A5DEB24B-F5F7-4333-A000-59CE89155577} = {D64977FB-1393-4DEB-92F4-83F70C0C4737}
+		{5363AA6A-CA44-42F2-99A4-57DD8DE00C96} = {D64977FB-1393-4DEB-92F4-83F70C0C4737}
+		{24FD7549-2C98-4700-AA4A-BDD42EB23A8B} = {D64977FB-1393-4DEB-92F4-83F70C0C4737}
+		{59BC9BDD-AF5C-41F4-9BC2-1DF76B13B44E} = {BC0DD7C8-6E3A-4B57-A7B1-0ADA92665DB7}
+		{623D9C25-7E00-45FB-A55E-6A154A98BB04} = {BC0DD7C8-6E3A-4B57-A7B1-0ADA92665DB7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3D34E048-8F91-4852-81D4-1CC777FAA7AA}

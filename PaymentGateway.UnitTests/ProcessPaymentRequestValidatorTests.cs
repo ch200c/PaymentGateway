@@ -1,5 +1,3 @@
-using PaymentGateway.Application.ProcessPayment;
-
 namespace PaymentGateway.UnitTests;
 
 public class ProcessPaymentRequestValidatorTests

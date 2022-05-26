@@ -4,6 +4,7 @@ using PaymentGateway.Api.Services;
 using PaymentGateway.Application.Interfaces;
 using PaymentGateway.Application.Interfaces.Repositories;
 using PaymentGateway.Application.Validators;
+using PaymentGateway.Domain.Utils;
 using PaymentGateway.Infrastructure.Persistence;
 using PaymentGateway.Infrastructure.Persistence.Repositories;
 using PaymentGateway.Infrastructure.Services;
@@ -15,7 +16,7 @@ builder.Services
     .AddControllers()
     .AddFluentValidation(configuration =>
         configuration.RegisterValidatorsFromAssemblyContaining<ProcessPaymentRequestValidator>())
-    .AddJsonOptions(options => 
+    .AddJsonOptions(options =>
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 builder.Services.AddEndpointsApiExplorer();
@@ -28,7 +29,7 @@ builder.Services.AddVersionedApiExplorer(options =>
     options.GroupNameFormat = "'v'VVV";
 });
 
-builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(builder => 
+builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(builder =>
     builder.UseInMemoryDatabase("PaymentGateway"));
 
 builder.Services.AddScoped<ICardRepository, CardRepository>();
@@ -38,6 +39,7 @@ builder.Services.AddTransient<IPaymentService, PaymentService>();
 builder.Services.AddSingleton<IAcquiringBankClient, AcquiringBankClient>();
 
 builder.Services.AddTransient<IDateTimeProvider, DateTimeProvider>();
+builder.Services.AddTransient(_ => new CardNumberPrivacyFilter('X'));
 
 var app = builder.Build();
 

@@ -1,14 +1,22 @@
 ﻿namespace PaymentGateway.Domain.Utils;
 
-public static class CardNumberPrivacyFilter
+public class CardNumberPrivacyFilter
 {
-    private static readonly char DigitMask = 'X';
-    private static readonly int UnmaskedDigitCount = 4;
+    private readonly char _digitMask;
 
-    public static string Mask(string data)
+    public CardNumberPrivacyFilter(char digitMask)
     {
-        var originalLength = data.Length;
-        var mask = Enumerable.Repeat(DigitMask, originalLength - UnmaskedDigitCount);
-        return new string(mask.Concat(data.TakeLast(4)).ToArray());
+        _digitMask = digitMask;
+    }
+
+    public string Mask(string input, int unmaskedDigitCount)
+    {
+        var originalLength = input.Length;
+        var mask = Enumerable.Repeat(_digitMask, originalLength - unmaskedDigitCount);
+
+        return new string(
+            mask
+                .Concat(input.TakeLast(unmaskedDigitCount))
+                .ToArray());
     }
 }

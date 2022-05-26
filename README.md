@@ -26,7 +26,7 @@ docker run -p 0.0.0.0:9888:80/tcp payment-gateway-api
 - Run `dotnet test` from the root folder
 
 ## Architecture
-The solution is divided into 4 projects, following the [Clean Architecture template](https://github.com/jasontaylordev/CleanArchitecture).
+The solution is divided into 4 main logic projects and 2 tests projects. It is following the [Clean Architecture template](https://github.com/jasontaylordev/CleanArchitecture).
 
 ## Assumptions
 - Acquiring Bank component communicates over HTTP (as well as our API does). Therefore, its interface is asynchronous with return types of `HttpResponseMessage`. Since we are only simulating it, we are hosting it together with our API.

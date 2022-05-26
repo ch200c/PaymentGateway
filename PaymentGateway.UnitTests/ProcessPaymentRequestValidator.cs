@@ -29,4 +29,56 @@ public class ProcessPaymentRequestValidatorTests
         // Assert
         Assert.True(result.IsValid);
     }
+
+    [Fact]
+    public void Validate_InvalidLengthCardNumber_ShouldFailValidation()
+    {
+        // Arrange
+        var request = new ProcessPaymentRequest("123456789012345", new CardExpiryDate(2023, 3), "123", 10.0m, "EUR");
+
+        // Act
+        var result = _validator.Validate(request);
+
+        // Assert
+        Assert.False(result.IsValid);
+    }
+
+    [Fact]
+    public void Validate_NegativeAmount_ShouldFailValidation()
+    {
+        // Arrange
+        var request = new ProcessPaymentRequest("1234567890123456", new CardExpiryDate(2023, 3), "123", -10.0m, "EUR");
+
+        // Act
+        var result = _validator.Validate(request);
+
+        // Assert
+        Assert.False(result.IsValid);
+    }
+
+    [Fact]
+    public void Validate_InvalidLengthCardCvv_ShouldFailValidation()
+    {
+        // Arrange
+        var request = new ProcessPaymentRequest("1234567890123456", new CardExpiryDate(2023, 3), "12", 10.0m, "EUR");
+
+        // Act
+        var result = _validator.Validate(request);
+
+        // Assert
+        Assert.False(result.IsValid);
+    }
+
+    [Fact]
+    public void Validate_InvalidLengthCurrencyCode_ShouldFailValidation()
+    {
+        // Arrange
+        var request = new ProcessPaymentRequest("1234567890123456", new CardExpiryDate(2023, 3), "123", 10.0m, "EU");
+
+        // Act
+        var result = _validator.Validate(request);
+
+        // Assert
+        Assert.False(result.IsValid);
+    }
 }

@@ -18,6 +18,13 @@ docker run -p 0.0.0.0:9888:80/tcp payment-gateway-api
 ```
 - Access the API at http://localhost:9888/swagger/index.html
 
+## Running the tests
+### Visual Studio
+- Run the tests from the Test Explorer
+
+### dotnet CLI
+- Run `dotnet test` from the root folder
+
 ## Architecture
 The solution is divided into 4 projects, following the [Clean Architecture template](https://github.com/jasontaylordev/CleanArchitecture).
 
